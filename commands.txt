@@ -1,0 +1,31 @@
+TOKEN=`kubectl -n kube-system get secret tenant1-account-token-4hdb9 -o jsonpath='{.data.token}' | base64 --decode`
+kubectl config set-credentials tenant1-account --token=$TOKEN
+kubectl config set-context --current --user=tenant1-account
+
+
+
+----
+Exporting tenant2-account sa token
+
+TOKEN=`kubectl -n tenant2 get secret tenant2-account-token-5vvnp -o jsonpath='{.data.token}' | base64 --decode`
+kubectl config set-credentials tenant2-account --token=$TOKEN
+kubectl config set-context --current --user=tenant2-account
+
+
+------------------------------------------------------------------------
+Quota.txt 
+
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: mem-cpu-limiting
+spec:
+  hard:
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    limits.cpu: "2"
+    limits.memory: 2Gi
+
+kubectl apply -f resourcequota.yaml -namespace=tenant1
+
+

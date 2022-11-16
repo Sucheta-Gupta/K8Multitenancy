@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tenant2-account
+  namespace: tenant2
+  labels:
+    name: tenant2-account
