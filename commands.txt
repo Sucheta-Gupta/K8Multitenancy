@@ -1,3 +1,19 @@
+Multitenancy in the same cluster is achieved using Namespaces and RBAC 
+Resources from Tenant1 are isolated from that of tenant 2 . 
+
+1. Created Two different namespaces tenant1 and tenant2
+
+2. Created Role/Rolebinding/SA in both the namespaces. 
+
+3. Created pods in both the namespace(here I created two diff applications however you can run the same instance of application for multiple customers in different namespace )
+
+4. Created respective Kubeconfig for tenant1-account sa and tenant2-account sa and accesed the resources using respective kubeconfigs.
+
+--------------------------------------------------------
+Commands to export SA token for kubeconfig
+
+Exporting tenant1-account sa token
+
 TOKEN=`kubectl -n kube-system get secret tenant1-account-token-4hdb9 -o jsonpath='{.data.token}' | base64 --decode`
 kubectl config set-credentials tenant1-account --token=$TOKEN
 kubectl config set-context --current --user=tenant1-account
@@ -28,4 +44,5 @@ spec:
 
 kubectl apply -f resourcequota.yaml -namespace=tenant1
 
-
+------------------------------------------------------------------------
+Lastly we can also add network policy within a namespace to limit ingress traffic which is not dpicted in this module
